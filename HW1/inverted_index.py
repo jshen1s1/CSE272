@@ -174,7 +174,7 @@ def Rocchio_r_f():
 
 # function write result to log file
 def dump(scores, fname, type):
-    with open(fname, "w") as newfile:
+    with open("results/"+fname, "w") as newfile:
         for queryid in scores:
             rank = 1
             for docid in scores[queryid]:
