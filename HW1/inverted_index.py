@@ -89,7 +89,7 @@ def Boolean():
                     scores[docid] += 1
                 else:
                     scores[docid] = 1
-        soreted_key = sorted(scores, key=scores.get, reverse=1)
+        soreted_key = sorted(scores, key=scores.get, reverse=1)[:50]
         sorted_score = {}
         for k in soreted_key:
             sorted_score[k] = scores[k]
@@ -112,7 +112,7 @@ def TF():
                     scores[docid] += weighted_term_frequency(word, docid)
                 else:
                     scores[docid] = weighted_term_frequency(word, docid)  
-        soreted_key = sorted(scores, key=scores.get, reverse=1)
+        soreted_key = sorted(scores, key=scores.get, reverse=1)[:50]
         sorted_score = {}
         for k in soreted_key:
             sorted_score[k] = scores[k]
@@ -135,7 +135,7 @@ def TF_IDF():
                     scores[docid] += weighted_term_frequency(word, docid) * computeIDF(word)
                 else:
                     scores[docid] = weighted_term_frequency(word, docid) * computeIDF(word)
-        soreted_key = sorted(scores, key=scores.get, reverse=1)
+        soreted_key = sorted(scores, key=scores.get, reverse=1)[:50]
         sorted_score = {}
         for k in soreted_key:
             sorted_score[k] = scores[k]
@@ -164,7 +164,7 @@ def Rocchio_r_f():
                 if j == 10:
                     break
             j = 0
-        soreted_key = sorted(scores, key=scores.get, reverse=1)
+        soreted_key = sorted(scores, key=scores.get, reverse=1)[:50]
         sorted_score = {}
         for k in soreted_key:
             sorted_score[k] = scores[k]
@@ -173,14 +173,14 @@ def Rocchio_r_f():
     return final_scores
 
 # function write result to log file
-def dump(scores, fname):
+def dump(scores, fname, type):
     with open(fname, "w") as newfile:
         for queryid in scores:
             rank = 1
             for docid in scores[queryid]:
                 queryID = "OHSU"+str(queryid+1)
                 score = str(scores[queryid].get(docid))
-                newfile.write(queryID + " Q0 " + str(docid) + " " + str(rank) + " " + score + " tfidf-Both\n")
+                newfile.write(queryID + " Q0 " + str(docid) + " " + str(rank) + " " + score + " " + type + "\n")
                 rank += 1
             rank = 1
 
@@ -189,7 +189,7 @@ TF_rank = TF()
 TF_IDF_rank = TF_IDF()
 r_f_rank = Rocchio_r_f()
 
-dump(boolean_rank, "boolean.txt")
-dump(TF_rank, "TF.txt")
-dump(TF_IDF_rank, "TF_IDF.txt")
-dump(r_f_rank, "RF.txt")
+dump(boolean_rank, "boolean.out", "boolean")
+dump(TF_rank, "TF.out", "TF")
+dump(TF_IDF_rank, "TF_IDF.out", "tfidf-Both")
+dump(r_f_rank, "RF.out", "relevance")
